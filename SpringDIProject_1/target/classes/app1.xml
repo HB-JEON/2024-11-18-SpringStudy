@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="sal" class="com.sist.main.Sawon">
+      <property name="sabun"><value>1</value></property>
+      <property name="name" value="홍길동"/>
+      <property name="dept" value="개발부"/>
+      <property name="loc" value="서울"/>
+      <property name="pay" value="3000"/>
+    </bean>
+    <!-- 가장 많이 사용되는 형태 -->
+    <bean id="sal2" class="com.sist.main.Sawon"
+      p:sabun="2"
+      p:name="심청이"
+      p:dept="총무부"
+      p:loc="경기"
+      p:pay="3500"
+    />
+    
+    <!-- 생성자 매개변수를 이용한 초기화 -->
+    <bean id="sal3" class="com.sist.main.Sawon">
+      <constructor-arg><value>3</value></constructor-arg>
+      <constructor-arg><value>박문수</value></constructor-arg>
+      <constructor-arg><value>영업부</value></constructor-arg>
+      <constructor-arg><value>대전</value></constructor-arg>
+      <constructor-arg><value>4500</value></constructor-arg>
+    </bean>
+    
+    <bean id="sal4" class="com.sist.main.Sawon"
+      c:sabun="4"
+      c:name="이순신"
+      c:dept="기획부"
+      c:loc="강원"
+      c:pay="4000"
+    />
+    
+    <bean id="sal5" class="com.sist.main.Sawon"
+      c:_0="5"
+      c:_1="강감찬"
+      c:_2="영업부"
+      c:_3="부산"
+      c:_4="3800"
+    />
+    
+</beans>
