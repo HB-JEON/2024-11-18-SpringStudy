@@ -20,4 +20,8 @@ public class FileInfoDAO {
 	{
 		return mapper.fileListData(no);
 	}
+	public void fileInfoDelete(int no)
+	{
+		mapper.fileInfoDelete(no);
+	}
 }

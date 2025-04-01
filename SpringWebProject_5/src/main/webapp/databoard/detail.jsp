@@ -49,7 +49,7 @@ h3{
           <td colspan="3">
             <ul>
               <c:forEach var="fvo" items="${list }">
-                <li>${fvo.filename }(${fvo.filesize }Bytes)</li>
+                <li><a href="download.do?fn=${fvo.filename }">${fvo.filename }</a>(${fvo.filesize }Bytes)</li>
               </c:forEach>
             </ul>
           </td>
