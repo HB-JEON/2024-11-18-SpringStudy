@@ -15,7 +15,7 @@
   <table class="table">
     <tr>
      <td class="text-center" colspan="3">
-       <img src="${vo.poster }" style="width: 720px; height: 420px">
+       <img src="${vo.poster }" style="width: 680px; height: 380px">
      </td>
     </tr>
     <tr>

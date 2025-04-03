@@ -19,6 +19,6 @@ REPLYCOUNT                 NUMBER
  */
 @Data
 public class GoodsVO {
-	private int no, discount ,hit;
-	private String name, sub, price, fprice, delivery, poster;
+	private int no, goods_discount;
+	private String goods_name, goods_sub, goods_price, goods_first_price, goods_delivery, goods_poster;
 }
