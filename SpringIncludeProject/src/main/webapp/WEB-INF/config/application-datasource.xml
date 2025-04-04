@@ -17,6 +17,29 @@
        p:username="#{db['username']}"
        p:password="#{db['password']}"
     />
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+    	p:dataSource-ref="ds"
+    />
+    <!-- 
+          DQL(SELECT) = commit(트랜잭션 대상 X)
+          DML(INSERT, UPDATE, DELETE)
+              => 저장(commit), 취소(rollback)
+          => 일괄 처리
+              여러개의 SQL 문장이 존재할 경우
+             ex) 입고 / 재고
+                 출고 / 재고
+                 카드 결제 / 포인트 추가
+           @Around	=>	try
+             setAutoCommit(false)
+             SQL
+             SQL
+             commit()
+           @AfterThrowing	=>	catch
+             rollback()
+           @After	=>	finally
+             setAutoCommit(true)
+           === 메소드 위에 @Transactional
+     -->
     <!-- 
        maxActive 8
        maxIdle   8

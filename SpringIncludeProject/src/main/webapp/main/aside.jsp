@@ -23,7 +23,7 @@
       <tr>
        <td class="text-center">${mvo.mno }</td>
        <td class="text-center">
-         <img src="${mvo.poster }" style="width: 30px; height: 30px;">
+         <img src="${mvo.poster }" style="width: 45px; height: 45px;">
        </td>
        <td>${mvo.title }</td>
       </tr>

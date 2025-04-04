@@ -23,7 +23,7 @@ p {
 <body>
   <div>
     <form method="post" action="../recipe/find.do">
-      <input type="text" class="input=sm" size="15" name="fd" value="${fd }" required>
+      <input type="text" class="input-sm" size="15" name="fd" value="${fd }" required>
       <input type="submit" value="검색" class="btn-sm btn-primary">
     </form>
   </div>

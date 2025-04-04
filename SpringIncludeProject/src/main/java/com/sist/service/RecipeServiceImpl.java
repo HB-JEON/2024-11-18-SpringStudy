@@ -59,5 +59,4 @@ public class RecipeServiceImpl implements RecipeService{
 		// TODO Auto-generated method stub
 		return rDao.chefTotalPage();
 	}
-	
 }
