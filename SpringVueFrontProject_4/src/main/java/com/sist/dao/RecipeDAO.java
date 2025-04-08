@@ -21,4 +21,16 @@ public class RecipeDAO {
 	{
 		return mapper.recipeTotalPage();
 	}
+	public List<RecipeVO> recipeFindListData(Map map) 
+	{
+		return mapper.recipeFindListData(map);
+	}
+	public int recipeFindTotalPage(String fd)
+	{
+		return mapper.recipeFindTotalPage(fd);
+	}
+	public RecipeDetailVO recipeDetailData(int no)
+	{
+		return mapper.recipeDetailData(no);
+	}
 }

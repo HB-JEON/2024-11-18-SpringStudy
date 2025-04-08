@@ -196,7 +196,7 @@ p{
     <div class="row">
       <div class="col-md-3" v-for="vo in recipe_list">
 	    <div class="thumbnail">
-	      <a href="#">
+	      <a :href="'../recipe/detail.do?no='+vo.no">
 	        <img :src="vo.poster" style="width:230px; height: 150px;">
 	        <div class="caption">
 	          <p>{{vo.title}}</p>
