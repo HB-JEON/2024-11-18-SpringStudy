@@ -24,19 +24,9 @@
     	p:username="#{db['username']}"
     	p:password="#{db['password']}"
     />
-    <!-- 
-         maxAtive  8
-         maxIdle   8
-         maxWailt  10000
-     -->
      <tx:annotation-driven/>
      <bean id="ssf" class="org.mybatis.spring.SqlSessionFactoryBean"
      	p:dataSource-ref="ds"
      />
-    <!-- 
-    SqlSessionFactoryBean을 이용하여 Mapper 구현
-         모든 Mapper 한번에 처리 <mybatis-spring>
-         Mapper를 한 개씩 처리 <spring>
-     -->
      <mybatis-spring:scan base-package="com.sist.mapper" factory-ref="ssf"/>
 </beans>
