@@ -27,4 +27,7 @@ public interface FoodMapper {
 	   @Select("SELECT CEIL(COUNT(*)/12.0) FROM project_food "
 	   		+ "WHERE address LIKE '%'||#{fd}||'%'")
 	   public int foodFindTotalPage(String fd);
+	   
+	   @Select("SELECT * FROM project_food WHERE fno=#{fno}")
+	   public FoodVO foodDetailData(int fno);
 }

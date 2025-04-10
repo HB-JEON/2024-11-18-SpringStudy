@@ -29,46 +29,46 @@ p{
     <table class="table">
      <tr>
       <td width=40% class="text-center" rowspan="8">
-        <img src="https://www.menupan.com${vo.poster }"
+        <img :src="'https://www.menupan.com'+vo.poster"
          style="width:380px;height: 300px" class="img-rounded">
       </td>
       <td width="60%" colspan="2">
-        <h3>${vo.name }&nbsp;
-        <span style="color:orange;">${vo.score }</span></h3>
+        <h3>{{vo.name}}&nbsp;
+        <span style="color:orange;"></span></h3>
       </td>
      </tr>
      <tr>
        <td width=15% style="color: gray">음식종류</td>
-       <td width=45%>${vo.type }</td>
+       <td width=45%></td>
      </tr>
      <tr>
        <td width=15% style="color: gray">주소</td>
-       <td width=45%>${vo.address }</td>
+       <td width=45%></td>
      </tr>
      <tr>
        <td width=15% style="color: gray">전화</td>
-       <td width=45%>${vo.phone }</td>
+       <td width=45%></td>
      </tr>
      <tr>
        <td width=15% style="color: gray">가격대</td>
-       <td width=45%>${vo.price }</td>
+       <td width=45%></td>
      </tr>
      <tr>
        <td width=15% style="color: gray">주차</td>
-       <td width=45%>${vo.parking }</td>
+       <td width=45%></td>
      </tr>
      <tr>
        <td width=15% style="color: gray">영업시간</td>
-       <td width=45%>${vo.time }</td>
+       <td width=45%></td>
      </tr>
      <tr>
        <td width=15% style="color: gray">테마</td>
-       <td width=45%>${vo.theme }</td>
+       <td width=45%></td>
      </tr>
     </table>
     <table class="table">
       <tr>
-       <td>${vo.content }</td>
+       <td></td>
       </tr>
     </table>
     <div style="height: 20px"></div>
@@ -86,7 +86,9 @@ p{
     	data() {
     		return {
     			fno: ${param.fno},
-    			food_vo: {}
+    			vo: {
+    				name: {}
+    			}
     		}
     	},
     	mounted() {
@@ -100,11 +102,11 @@ p{
     		}).catch(error => {
     			console.log(error.response)
     		})
-    	}
+    	},
     	methods: {
     		
     	}
-    }).mount()
+    }).mount(".container")
   </script>
 </body>
 </html>

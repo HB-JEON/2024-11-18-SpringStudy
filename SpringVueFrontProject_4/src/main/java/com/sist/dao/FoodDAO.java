@@ -20,12 +20,16 @@ public class FoodDAO {
 	{
 		return mapper.foodTotalPage();
 	}
-	 public List<FoodVO> foodFindListData(Map map)
-	 {
-		 return mapper.foodFindListData(map);
-	 }
-	 public int foodFindTotalPage(String fd)
-	 {
-		 return mapper.foodFindTotalPage(fd);
-	 }
+	public List<FoodVO> foodFindListData(Map map)
+	{
+		return mapper.foodFindListData(map);
+	}
+	public int foodFindTotalPage(String fd)
+	{
+		return mapper.foodFindTotalPage(fd);
+	}
+	public FoodVO foodDetailData(int no)
+	{
+		return mapper.foodDetailData(no);
+	}
 }
