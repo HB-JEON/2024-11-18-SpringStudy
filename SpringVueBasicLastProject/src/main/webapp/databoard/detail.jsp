@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <style type="text/css">
 .container{
@@ -26,15 +27,15 @@
       <table class="table">
         <tr>
          <th width="20%" class="text-center">번호</th>
-         <th width="30%" class="text-center">{{vo.no}}</th>
+         <td width="30%" class="text-center">{{vo.no}}</td>
          <th width="20%" class="text-center">작성일</th>
-         <th width="30%" class="text-center">{{vo.dbday}}</th>
+         <td width="30%" class="text-center">{{vo.dbday}}</td>
         </tr>
         <tr>
          <th width="20%" class="text-center">이름</th>
-         <th width="30%" class="text-center">{{vo.name}}</th>
+         <td width="30%" class="text-center">{{vo.name}}</td>
          <th width="20%" class="text-center">조회수</th>
-         <th width="30%" class="text-center">{{vo.hit}}</th>
+         <td width="30%" class="text-center">{{vo.hit}}</td>
         </tr>
         <tr>
          <th width="20%" class="text-center">제목</th>
@@ -42,13 +43,13 @@
         </tr>
         <tr v-if="vo.filecount>0">
          <th width="20%" class="text-center">첨부 파일</th>
-         <th colspan="3">
+         <td colspan="3">
            <ul>
              <li v-for="(fn, index) in filename">
                <a :href="'download.do?fn'+fn">{{fn}}</a>({{filesize[index]}}Bytes)
              </li>
            </ul>
-         </th>
+         </td>
         </tr>
         <tr>
          <td colspan="4" valign="top" class="text-center" height="200">
@@ -74,22 +75,39 @@
               ★{{rvo.name}}★&nbsp;{{rvo.dbday}}</td>
               <td class="text-right">
                 <span v-if="rvo.id===sessionId">
-                  <button class="btn-xs btn-success">수정</button>
-                  <button class="btn-xs btn-info">삭제</button>
+                  <button class="btn-xs btn-success upbtn" :id="'up'+rvo.no" @click="replyUpdateForm(rvo.no)">수정</button>
+                  <button class="btn-xs btn-info" @click="replyDelete(rvo.no)">삭제</button>
                 </span>
-                <button class="btn-xs btn-danger" v-if="sessionId!==''">댓글</button>
+                <button class="btn-xs btn-danger" v-if="sessionId!==''" @click="replyReplyForm(rvo.no)">댓글</button>
               </td>
              </tr>
              <tr>
               <td class="text-left" colspan="2">
-                <span v-if="rvo.group_tab>0">
-                  <span v-for="i in range(rvo.group_tab)">
-                    &nbsp;&nbsp;
-                  </span>
-                </span>
+              <%--
+                    v-bind: 
+                    :
+               --%>
                 <pre :style="'white-space: pre-wrap;background-color: white;border: none;padding-left:'+rvo.group_tab*20+'px'">{{rvo.msg}}</pre>
               </td>
              </tr>
+             
+             <tr :id="'u'+rvo.no" class="update">
+	          <td>
+	           <textarea rows="4" cols="65" style="float: left" :id="'umsg'+rvo.no">{{rvo.msg}}</textarea>
+	           <input type="button" value="댓글 수정" class="btn-primary" style="float: left;height: 92px" @click="replyUpdate(rvo.no)">
+	          </td>
+	         </tr>
+	         <%--
+	               출력 : <태그>{{반드시 data()}}</태그>
+	               속성 : 일반 데이터(: X)
+	          --%>
+	         <tr :id="'m'+rvo.no" class="insert">
+	          <td>
+	           <textarea rows="4" cols="65" style="float: left" :id="'imsg'+rvo.no"></textarea>
+	           <input type="button" value="댓글 쓰기" class="btn-primary" style="float: left;height: 92px" @click="replyReplyInsert(rvo.no)">
+	          </td>
+	         </tr>
+             
            </table>
          </td>
        </tr>
@@ -100,7 +118,7 @@
         <td>
           <textarea rows="4" cols="65" style="float: left" v-model="msg" ref="msg">
           </textarea>
-          <input type="button" value="댓글 쓰기" class="btn-primary" style="float: left;height: 94px" @click="replyInsert()">
+          <input type="button" value="댓글 쓰기" class="btn-primary" style="float: left;height: 92px" @click="replyInsert()">
         </td>
        </tr>
      </table>
@@ -134,6 +152,8 @@
     		}).catch(err => {
     			console.log(err.res)
     		})
+    		$('.update').hide()
+    		$('.insert').hide()
     	}
     }).mount("#detailApp")
     
@@ -143,7 +163,10 @@
     			bno: ${no},
     			reply_list: [],
     			msg: '',
-    			sessionId: '${sessionId}' 
+    			sessionId: '${sessionId}',
+    			px: '0px',
+    			upReply: false,
+    			inReply: false
     		}
     	},
     	mounted() {
@@ -154,16 +177,82 @@
     		}).then(res => {
     			this.reply_list=res.data
     		})
+    		// 다른 JS 연결 => $(function(){})
     	},
     	methods: {
-    		range(tab) {
-        		let arr=[]
-        		for(let i=0; i<tab; i++)
+    		replyReplyForm(no) {
+    			$('.update').hide()
+        		$('.insert').hide()
+        		if(this.inReply===false)
         		{
-        			arr[i]=i
+        			this.inReply=true
+        			$('#m'+no).show()
         		}
-        		return arr
-        	},
+        		else
+        		{
+        			this.inReply=false
+        			$('#m'+no).hide()
+        		}
+    		},
+    		replyReplyInsert(no) {
+    			let msg=$('#imsg'+no).val()
+    			if(msg==="")
+    			{
+    				$('#imsg'+no).focus()
+    				return
+    			}
+    			axios.get('../reply/reply_reply_insert.do', {
+    				params: {
+    					bno: this.bno,
+    					pno: no,
+    					msg: msg
+    				}
+    			}).then(res => {
+    				this.reply_list=res.data
+    				$('#m'+no).hide()
+    			})
+    		},
+    		replyDelete(no) {
+    			axios.get('../reply/delete_vue.do', {
+    				params: {
+    					no: no,
+    					bno: this.bno
+    				}
+    			}).then(res => {
+    				this.reply_list=res.data
+    			})
+    		},
+    		replyUpdate(no) {
+    			let msg=$('#umsg'+no).val()
+    			axios.get('../reply/update_vue.do', {
+    				params: {
+    					no: no,
+        				msg: msg,
+        				bno: this.bno
+    				}
+    			}).then(res => {
+    				this.reply_list=res.data
+    				$('#u'+no).hide()
+    				$('.upbtn').text("수정")
+    			})
+    		},
+    		replyUpdateForm(no) {
+    			$('.update').hide()
+        		$('.insert').hide()
+        		$('.upbtn').text("수정")
+        		if(this.upReply===false)
+        		{
+        			this.upReply=true
+        			$('#u'+no).show()
+        			$('#up'+no).text("취소")
+        		}
+        		else
+        		{
+        			this.upReply=false
+        			$('#u'+no).hide()
+        			$('#up'+no).text("수정")
+        		}
+    		},
     		replyInsert() {
     			if(this.msg==="")
     			{
@@ -179,8 +268,17 @@
     				console.log(res.data)
     				this.reply_list=res.data
     				this.msg=''
+    				this.px=res.data.group_tab*3+'px'
     			})
-    		}
+    		},
+    		range(tab) {
+        		let arr=[]
+        		for(let i=0; i<tab; i++)
+        		{
+        			arr[i]=i
+        		}
+        		return arr
+        	}
     	}
     }).mount("#replyApp")
   </script>
