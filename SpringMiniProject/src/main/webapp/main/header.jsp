@@ -27,7 +27,7 @@
                 <div class="col-7 col-sm-6">
                     <div class="signup-search-area d-flex align-items-center justify-content-end">
                         <div class="login_register_area d-flex">
-                          <c:if test="${sessionScope.id==null }">
+                          <c:if test="${sessionScope.userid==null }">
                             <div class="login">
                                 <a href="../member/login.do">로그인</a>
                             </div>
@@ -36,7 +36,7 @@
                             </div>
                           </c:if>
                         </div>
-                        <c:if test="${sessionScope.id!=null }">
+                        <c:if test="${sessionScope.userid!=null }">
                             <div class="login">
                                 ${sessionScope.username }(
                                   <sec:authorize access="hasRole('ROLE_ADMIN')">관리자</sec:authorize>

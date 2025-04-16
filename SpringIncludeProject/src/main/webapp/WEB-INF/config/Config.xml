@@ -7,9 +7,6 @@
       mybatis-spring.jar
   -->
 <configuration>
-  <typeAliases>
-    <typeAlias type="com.sist.vo.RecipeVO" alias="RecipeVO"/>
-  </typeAliases>
   <mappers>
     <mapper resource="com/sist/mapper/recipe-mapper.xml"/>
   </mappers>

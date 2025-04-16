@@ -8,13 +8,18 @@ import com.sist.mapper.*;
 import com.sist.vo.*;
 @Repository
 public class MemberDAO {
-  @Autowired
-  private MemberMapper mapper;
+	@Autowired
+	private MemberMapper mapper;
   
-  @Transactional
-  public void memberInsert(MemberVO vo)
-  {
-	  mapper.memberInsert(vo);
-	  mapper.memberAuthorityInsert(vo.getUserid());
-  }
+	@Transactional
+	public void memberInsert(MemberVO vo)
+	{
+		mapper.memberInsert(vo);
+			mapper.memberAuthorityInsert(vo.getUserid());
+	}
+	
+	public MemberVO memberSessionData(String userid)
+	{
+		return mapper.memberSessionData(userid);
+	}
 }

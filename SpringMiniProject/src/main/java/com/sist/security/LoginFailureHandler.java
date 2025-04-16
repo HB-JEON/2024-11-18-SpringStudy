@@ -25,7 +25,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
 		{
 			if(exception instanceof BadCredentialsException)
 			{
-				errorMsg="아이디와 비밀번호를 확인 해주세요.";
+				errorMsg="아이디 혹은 비밀번호를 확인 해주세요.";
 			}
 			else if(exception instanceof DisabledException)
 			{
