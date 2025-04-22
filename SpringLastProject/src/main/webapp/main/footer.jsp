@@ -94,7 +94,5 @@
             </div>
         </div>
     </footer>
-
-    <!-- ****** Footer Menu Area End ****** -->
 </body>
 </html>
