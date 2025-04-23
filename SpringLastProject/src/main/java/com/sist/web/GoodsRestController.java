@@ -2,25 +2,23 @@ package com.sist.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.*;
 import com.sist.vo.*;
 import com.sist.service.*;
 
 @RestController
-@RequestMapping("food/")
-public class FoodRestController {
+public class GoodsRestController {
 	@Autowired
-	private FoodService service;
+	private GoodsService service;
 	
-	@GetMapping("list_vue.do")
-	public Map food_list(int page)
+	@GetMapping("goods/list_vue.do")
+	public Map goods_list(int page)
 	{
 		
 		int rowSize=12;
-		List<FoodVO> list=service.busanFoodListData((page-1)*rowSize, page*rowSize);
-		int totalpage=service.busanFoodTotalPage();
+		List<GoodsVO> list=service.busanGoodsListData(page*(rowSize)-(rowSize-1), page*rowSize);
+		int totalpage=service.busanGoodsTotalPage();
 		
 		final int BLOCK=10;
 		int startPage=((page-1)/BLOCK*BLOCK)+1;
@@ -38,5 +36,11 @@ public class FoodRestController {
 		map.put("endPage", endPage);
 		
 		return map;
+	}
+	@GetMapping("goods/detail_vue.do")
+	public GoodsVO goods_detail(int no)
+	{
+		GoodsVO vo=service.busanGoodsDedatilData(no);
+		return vo;
 	}
 }

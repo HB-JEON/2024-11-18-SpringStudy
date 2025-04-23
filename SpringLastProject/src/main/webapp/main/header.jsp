@@ -125,7 +125,10 @@
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">부산 특산물</a>
+                                    <a class="nav-link" href="../movie/list.do">여행 동영상</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="../goods/list.do">부산 특산물</a>
                                 </li>
                                 <c:if test="${sessionScope.userid!=null }">
                                 <li class="nav-item">

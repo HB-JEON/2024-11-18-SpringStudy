@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%--
-    AWS => tomcat : 9버전 
+      AWS => tomcat : 9버전
  --%>
 <!DOCTYPE html>
 <html>
@@ -11,12 +11,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-   <div class="breadcumb-area" style="background-image: url(img/bg-img/breadcumb.jpg);">
+<!-- ****** Breadcumb Area Start ****** -->
+    <div class="breadcumb-area" style="background-image: url(../img/bg-img/breadcumb.jpg)">
         <div class="container h-100">
             <div class="row h-100 align-items-center">
                 <div class="col-12">
                     <div class="bradcumb-title text-center">
-                        <h2>맛집 상세보기</h2>
+                        <h2>상품 상세보기</h2>
                     </div>
                 </div>
             </div>
@@ -29,7 +30,6 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#"><i class="fa fa-home" aria-hidden="true"></i></a></li>
-                            <li class="breadcrumb-item"><a href="#"></a></li>
                             <li class="breadcrumb-item active" aria-current="page"></li>
                         </ol>
                     </nav>
@@ -37,77 +37,54 @@
             </div>
         </div>
     </div>
-    <section class="single_blog_area section_padding_80">
+<!-- ****** Breadcumb Area End ****** -->
+
+<!-- ****** Single Blog Area Start ****** -->
+    <section class="single_blog_area section_padding_80" id="detailApp">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-8">
                     <div class="row no-gutters">
-                          <div class="col-12 col-sm-12">
-                            <div class="related-post-area section_padding_50">
-                              
-                                <div class="related-post-slider owl-carousel">
-                                    <!-- Single Related Post-->
-                                    <c:forEach items="${list }" var="img">
-	                                    <div class="single-post">
-	                                        <!-- Post Thumb -->
-	                                        <div class="post-thumb">
-	                                            <img src="http://www.menupan.com${img }" alt="">
-	                                        </div>
-	                                    </div>
-                                    </c:forEach>
-                                </div>
-                              </div>
-                            </div>
                     <%-- 상세보기 --%>
                     <table class="table">
                       <tr>
-                       <td width=30% class="text-center" rowspan="8">
-                         <img src="https://www.menupan.com${vo.poster}" style="width:270px;height: 300px">
+                       <td width="30%" class="text-center" rowspan="8">
+                         <img :src="vo.goods_poster" style="width: 270px; height: 300px;">
                        </td>
-                       <td colspan="2">
-                        <h3>${vo.name}&nbsp;<span style="color:orange">${vo.score }</span></h3>
+                       <td colspan="3">
+                         <h3>{{vo.goods_name }}</h3>
                        </td>
                       </tr>
                       <tr>
-                        <th width=25%>주소</th>
-                        <td width=45%>${vo.address }</td>
+                       <td colspan="2" style="color: gray;">{{vo.goods_sub}}</td>
                       </tr>
                       <tr>
-                        <th width=25%>전화</th>
-                        <td width=45%>${vo.phone }</td>
+                       <th width="25%" style="color: red;">{{vo.goods_discount}}%</th>
+                       <td width="45%">{{vo.goods_price}}</td>
                       </tr>
                       <tr>
-                        <th width=25%>음식종류</th>
-                        <td width=45%>${vo.type }</td>
+                       <th width="25%">배송</th>
+                       <td width="45%">{{vo.goods_delivery}}</td>
                       </tr>
                       <tr>
-                        <th width=25%>가격대</th>
-                        <td width=45%>${vo.price }</td>
+                       <th width="25%">수량</th>
+                       <td width="45%"></td>
                       </tr>
                       <tr>
-                        <th width=25%>주차</th>
-                        <td width=45%>${vo.parking }</td>
+                       <th width="25%">총 금액</th>
+                       <td width="45%"></td>
                       </tr>
                       <tr>
-                        <th width=25%>영업시간</th>
-                        <td width=45%>${vo.time }</td>
-                      </tr>
-                      <tr>
-                        <th width=25%>테마</th>
-                        <td width=45%>${vo.theme }</td>
+                       <td colspan="2"></td>
                       </tr>
                     </table>
                     <table class="table">
-                      <tr>
-                        <td>${vo.content }</td>
-                      </tr>
                     </table>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <%--  댓글 위치 --%>
+         <%--  댓글 위치 --%>
         <div style="height: 10px"></div>
             <div id="replyApp">
               <%-- 댓글 : Vue --%>
@@ -121,7 +98,7 @@
                                         <div class="comment-wrapper d-flex" v-if="rvo.group_step===0">
                                             <!-- Comment Meta -->
                                             <div class="comment-author">
-                                                <img :src="rvo.sex==='남자'?'../img/man.png':'../img/woman.png'" alt="">
+                                                <img :src="rvo.sex==='남성'?'../img/man.png':'../img/woman.png'" alt="">
                                             </div>
                                             <!-- Comment Content -->
                                             <div class="comment-content">
@@ -210,40 +187,47 @@
                                 </div>
                              </div>
                             </c:if>
-
             </div>
-                   
     </section>
     <script>
     let replyApp=Vue.createApp({
    	 data(){
    		 return {
-   			 reply_list:[],
-   			 cno:${vo.fno},
-   			 type:2,
-   			 curpage:1,
-   			 sessionId:'${sessionId}',
-   			 totalpage:0,
-   			 startPage:0,
-   			 endPage:0,
-   			 msg:'',
-   			 upReply:false,
-   			 inReply:false
+   			 vo: {},
+   			 reply_list: [],
+   			 cno: ${no},
+   			 type: 3,
+   			 curpage: 1,
+   			 sessionId: '${sessionId}',
+   			 totalpage: 0,
+   			 startPage: 0,
+   			 endPage: 0,
+   			 msg: '',
+   			 upReply: false,
+   			 inReply: false
    		 }
    	 },
-   	 mounted(){
+   	 mounted() {
+   		 axios.get('../goods/detail_vue.do', {
+   			params: {
+   				no: this.cno
+   			} 
+   		 }).then(res => {
+   			 this.vo=res.data
+   		 }).catch(error => {
+   			console.log(error.response) 
+   		 })
    		 this.dataRecv()
    	 },
-   	 methods:{
-   		 replyDelete(no){
-   			 //alert("no:"+no)
-   			 axios.get('../comment/delete_vue.do',{
+   	 methods: {
+   		 replyDelete(no) {
+   			 axios.get('../comment/Delete_vue.do', {
    				 params:{
-   					 no:no,
+   					 no: no,
    					 cno:this.cno,
    					 type:this.type
    				 }
-   			 }).then(res=>{
+   			 }).then(res => {
    				 console.log(res.data)
    				 // res.data=Map {list=[],curpage:1....}
    				 this.reply_list=res.data.list
@@ -251,12 +235,11 @@
    				 this.totalpage=res.data.totalpage
    				 this.startPage=res.data.startPage
    				 this.endPage=res.data.endPage
-   				 
-   			 }).catch(error=>{
+   			 }).catch(error => {
    				 console.log(error.response)
    			 })
    		 },
-   		 replyReplyInsertForm(no){
+   		 replyReplyInsertForm(no) {
    			 $('.ins').hide()
    			 $('.insert').text("Reply")
    			 $('.ups').hide()
@@ -274,7 +257,7 @@
    				 $('#i'+no).text("Reply")
    			 }
    		 },
-   		 replyReplyInsert(no){
+   		 replyReplyInsert(no) {
    			 let msg=$('#imsg'+no).val()
    			 if(msg.trim()==="")
    			 {
@@ -283,7 +266,7 @@
    			 }
    			 axios.post('../comment/reply_insert_vue.do',null,{
    				 params:{
-   					 pno:no,
+   					 pno: no,
    					 cno:this.cno,
    					 type:this.type,
    					 msg:msg
@@ -297,26 +280,22 @@
    				 this.startPage=res.data.startPage
    				 this.endPage=res.data.endPage
    				 $('#imsg'+no).val("")
-   				 // textarea
-   				 $('#in'+no).hide()
-   				 // table
+   				 $('#ip'+no).hide()
    				 $('#i'+no).text("Reply")
-   				 // Button
    			 }).catch(error=>{
    				 console.log(error.response)
    			 })
    		 },
-   		 replyUpdate(no){
+   		 replyUpdate(no) {
    			 let msg=$('#umsg'+no).val()
    			 if(msg.trim()==="")
    			 {
    				 $('#umsg'+no).focus()
    				 return
    			 }
-   			 
    			 axios.post('../comment/update_vue.do',null,{
    				 params:{
-   					 no:no,
+   					 no: no,
    					 cno:this.cno,
    					 type:this.type,
    					 msg:msg
@@ -330,11 +309,8 @@
    				 this.startPage=res.data.startPage
    				 this.endPage=res.data.endPage
    				 $('#umsg'+no).val("")
-   				 // textarea
    				 $('#up'+no).hide()
-   				 // table
    				 $('#u'+no).text("Update")
-   				 // Button
    			 }).catch(error=>{
    				 console.log(error.response)
    			 })
@@ -360,7 +336,7 @@
    		 replyInsert(){
    			 /*
    			    데이터 읽기 쓰기 => data()안 있는 변수 
-   			                => v-model
+   			                   => v-model
    			    해당 태그 제어 
    			     => ref
    			     => $refs.ref명...
@@ -411,7 +387,7 @@
    			 })
    		 }
    	 }
-    }).mount("#replyApp")   
+    }).mount("#detailApp")
     </script>
 </body>
 </html>
