@@ -1,15 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../css/map.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
 </head>
 <body>
-	<!-- ****** Breadcumb Area Start ****** -->
-    <div class="breadcumb-area" style="background-image: url(../img/bg-img/breadcumb.jpg);">
+<div class="breadcumb-area" style="background-image: url(../img/bg-img/breadcumb.jpg);">
         <div class="container h-100">
             <div class="row h-100 align-items-center">
                 <div class="col-12">
@@ -38,36 +39,36 @@
         <div class="container">
             <div class="row">
               <table class="table">
-                <tr>
-                 <td class="text-center" colspan="2">
-                   <img src="${vo.poster }" style="width: 700px; height: 350px">
-                 </td>
-                </tr>
-                <tr>
-                 <th width="20%">주소</th>
-                 <td width="80%">${vo.address }</td>
-                </tr>
-                <tr>
-                 <th width="20%">전화</th>
-                 <td width="80%">${vo.phone }</td>
-                </tr>
-                <tr>
-                 <th width="20%">교통정보 / 운영시간</th>
-                 <td width="80%">${vo.info }</td>
-                </tr>
+               <tr>
+                <td class="text-center" colspan="2">
+                 <img src="${vo.poster }" style="width: 700px;height: 250px">
+                </td>
+               </tr>
+               <tr>
+                 <th width=20%>주소</th>
+                 <td width=80%>${vo.address }</td>
+               </tr>
+               <tr>
+                 <th width=20%>전화</th>
+                 <td width=80%>${vo.phone }</td>
+               </tr>
+               <tr>
+                 <th width=20%>교통정보/운영시간</th>
+                 <td width=80%>${vo.info }</td>
+               </tr>
               </table>
             </div>
             <div style="height: 10px"></div>
-            <div class="row" id="replyApp">
-            	<%-- 지도 출력 --%>
-            	<div class="map_wrap">
+            <div class="row">
+              <%-- 지도출력 --%>
+              <div class="map_wrap">
     <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
 
     <div id="menu_wrap" class="bg_white">
         <div class="option">
             <div>
                 <form onsubmit="searchPlaces(); return false;">
-                    키워드 : <input type="text" value="${addr }" id="keyword" size="15"> 
+                    키워드 : <input type="text" value="${addr } 맛집" id="keyword" size="15"> 
                     <button type="submit">검색하기</button> 
                 </form>
             </div>
@@ -76,9 +77,9 @@
         <ul id="placesList"></ul>
         <div id="pagination"></div>
     </div>
-</div>
+  </div>
 
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=754884240383c655e9425cfe0a3e1713&libraries=services"></script>
+<script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=72fa81817487692b6dc093004af97650&libraries=services&libraries=services"></script>
 <script>
 // 마커를 담을 배열입니다
 var markers = [];
@@ -297,70 +298,312 @@ function removeAllChildNods(el) {
     }
 }
 </script>
-            </div>
-            <div style="height: 10px"></div>
-            <div class="row" id="replyApp">
+      <%--  댓글 위치 --%>
+        <div style="height: 10px"></div>
+            <div id="replyApp">
               <%-- 댓글 : Vue --%>
-              <div class="comment_area section_padding_50 clearfix">
-                                <h4 class="mb-30">2 Comments</h4>
+              <!-- Comment Area Start -->
+                            <div class="comment_area section_padding_50 clearfix">
+                                
 
                                 <ol>
                                     <!-- Single Comment Area -->
-                                    <li class="single_comment_area">
-                                        <div class="comment-wrapper d-flex">
+                                    <li class="single_comment_area" v-for="rvo in reply_list">
+                                        <div class="comment-wrapper d-flex" v-if="rvo.group_step===0">
                                             <!-- Comment Meta -->
                                             <div class="comment-author">
-                                                <img src="img/blog-img/17.jpg" alt="">
+                                                <img :src="rvo.sex==='남성'?'../img/man.png':'../img/woman.png'" alt="">
                                             </div>
                                             <!-- Comment Content -->
                                             <div class="comment-content">
-                                                <span class="comment-date text-muted">27 Aug 2018</span>
-                                                <h5>Brandon Kelley</h5>
-                                                <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.</p>
-                                                <a href="#">Like</a>
-                                                <a class="active" href="#">Reply</a>
+                                                <span class="comment-date text-muted">{{rvo.dbday}}</span>
+                                                <h5>{{rvo.username}}</h5>
+                                                <p>{{rvo.msg}}</p>
+                                                <button v-if="sessionId===rvo.userid" class="btn-xs btn-danger update" style="margin-left: 2px" :id="'u'+rvo.no" @click="replyUpdateForm(rvo.no)">Update</button>
+                                                <button v-if="sessionId===rvo.userid" class="btn-xs btn-info" style="margin-left: 2px" @click="replyDelete(rvo.no)">Delete</button>
+                                                <button v-if="sessionId!==''" class="btn-xs btn-success insert" style="margin-left: 2px" :id="'i'+rvo.no" @click="replyReplyInsertForm(rvo.no)">Reply</button>
+                                                <%-- 수정창 --%>
+                                                <table class="table ups" style="display:none" :id="'up'+rvo.no">
+			                                     <tr>
+			                                      <td>
+			                                       <textarea rows="4" cols="45" style="float: left" :id="'umsg'+rvo.no">{{rvo.msg}}</textarea>
+			                                       <input type="button" value="수정"
+			                                        style="float: left;background-color: blue;color:white;width: 80px;height: 94px"
+			                                         @click="replyUpdate(rvo.no)"
+			                                        >
+			                                      </td>
+			                                     </tr>
+			                                    </table>
+                                                <%-- 대댓글창 --%>
+                                                <table class="table ins" style="display:none" :id="'in'+rvo.no">
+			                                     <tr>
+			                                      <td>
+			                                       <textarea rows="4" cols="45" style="float: left" :id="'imsg'+rvo.no"></textarea>
+			                                       <input type="button" value="댓글"
+			                                        style="float: left;background-color: blue;color:white;width: 80px;height: 94px"
+			                                         @click="replyReplyInsert(rvo.no)"
+			                                        >
+			                                      </td>
+			                                     </tr>
+			                                    </table>
                                             </div>
                                         </div>
-                                        <ol class="children">
+                                        <ol class="children" v-if="rvo.group_step>0">
                                             <li class="single_comment_area">
                                                 <div class="comment-wrapper d-flex">
                                                     <!-- Comment Meta -->
                                                     <div class="comment-author">
-                                                        <img src="img/blog-img/18.jpg" alt="">
-                                                    </div>
-                                                    <!-- Comment Content -->
-                                                    <div class="comment-content">
-                                                        <span class="comment-date text-muted">27 Aug 2018</span>
-                                                        <h5>Brandon Kelley</h5>
-                                                        <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.</p>
-                                                        <a href="#">Like</a>
-                                                        <a class="active" href="#">Reply</a>
-                                                    </div>
+		                                                <img :src="rvo.sex==='남성'?'../img/man.png':'../img/woman.png'" alt="">
+		                                            </div>
+		                                            <!-- Comment Content -->
+		                                            <div class="comment-content">
+		                                                <span class="comment-date text-muted">{{rvo.dbday}}</span>
+		                                                <h5>{{rvo.username}}</h5>
+		                                                <p>{{rvo.msg}}</p>
+		                                                <button v-if="sessionId===rvo.userid" class="btn-xs btn-danger update" style="margin-left: 2px" :id="'u'+rvo.no" @click="replyUpdateForm(rvo.no)">Update</button>
+                                                        <button v-if="sessionId===rvo.userid" class="btn-xs btn-info" style="margin-left: 2px" @click="replyDelete(rvo.no)">Delete</button>
+		                                                <table class="table ups" style="display:none" :id="'up'+rvo.no">
+					                                     <tr>
+					                                      <td>
+					                                       <textarea rows="4" cols="45" style="float: left" :id="'umsg'+rvo.no">{{rvo.msg}}</textarea>
+					                                       <input type="button" value="수정"
+					                                        style="float: left;background-color: blue;color:white;width: 80px;height: 94px"
+					                                         @click="replyUpdate(rvo.no)"
+					                                        >
+					                                      </td>
+					                                     </tr>
+					                                    </table>
+		                                            </div>
                                                 </div>
                                             </li>
                                         </ol>
                                     </li>
-                                    <li class="single_comment_area">
-                                        <div class="comment-wrapper d-flex">
-                                            <!-- Comment Meta -->
-                                            <div class="comment-author">
-                                                <img src="img/blog-img/19.jpg" alt="">
-                                            </div>
-                                            <!-- Comment Content -->
-                                            <div class="comment-content">
-                                                <span class="comment-date text-muted">27 Aug 2018</span>
-                                                <h5>Brandon Kelley</h5>
-                                                <p>Neque porro qui squam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.</p>
-                                                <a href="#">Like</a>
-                                                <a class="active" href="#">Reply</a>
-                                            </div>
-                                        </div>
-                                    </li>
+                                    
                                 </ol>
                             </div>
+
+                            <!-- Leave A Comment -->
+                            
+                            <c:if test="${sessionScope.userid!=null }">
+                             <div class="leave-comment-area section_padding_50 clearfix">
+                                <div class="comment-form">
+                                    <table class="table">
+                                     <tr>
+                                      <td>
+                                       <textarea rows="4" cols="70" style="float: left" ref="msg" v-model="msg"></textarea>
+                                       <input type="button" value="댓글"
+                                        style="float: left;background-color: blue;color:white;width: 80px;height: 94px"
+                                         @click="replyInsert()"
+                                        >
+                                      </td>
+                                     </tr>
+                                    </table>
+                                </div>
+                             </div>
+                            </c:if>
+
             </div>
-        </div>
+           
     </section>
-    <!-- ****** Breadcumb Area End ****** -->
+   
+    <script>
+     let replyApp=Vue.createApp({
+    	 data(){
+    		 return {
+    			 reply_list:[],
+    			 cno:${vo.no},
+    			 type:1,
+    			 curpage:1,
+    			 sessionId:'${sessionId}',
+    			 totalpage:0,
+    			 startPage:0,
+    			 endPage:0,
+    			 msg:'',
+    			 upReply:false,
+    			 inReply:false
+    		 }
+    	 },
+    	 mounted(){
+    		 this.dataRecv()
+    	 },
+    	 methods:{
+    		 replyDelete(no){
+    			 //alert("no:"+no)
+    			 axios.get('../comment/delete_vue.do',{
+    				 params:{
+    					 no:no,
+    					 cno:this.cno,
+    					 type:this.type
+    				 }
+    			 }).then(res=>{
+    				 console.log(res.data)
+    				 // res.data=Map {list=[],curpage:1....}
+    				 this.reply_list=res.data.list
+    				 this.curpage=res.data.curpage
+    				 this.totalpage=res.data.totalpage
+    				 this.startPage=res.data.startPage
+    				 this.endPage=res.data.endPage
+    				 
+    			 }).catch(error=>{
+    				 console.log(error.response)
+    			 })
+    		 },
+    		 replyReplyInsertForm(no){
+    			 $('.ins').hide()
+    			 $('.insert').text("Reply")
+    			 $('.ups').hide()
+    			 $('.update').text("Update")
+    			 if(this.inReply===false)
+    			 {
+    				 this.inReply=true
+    				 $('#in'+no).show()
+    				 $('#i'+no).text("Cancel")
+    			 }
+    			 else
+    			 {
+    				 this.inReply=false
+    				 $('#in'+no).hide()
+    				 $('#i'+no).text("Reply")
+    			 }
+    		 },
+    		 replyReplyInsert(no){
+    			 let msg=$('#imsg'+no).val()
+    			 if(msg.trim()==="")
+    			 {
+    				 $('#imsg'+no).focus()
+    				 return
+    			 }
+    			 axios.post('../comment/reply_insert_vue.do',null,{
+    				 params:{
+    					 pno:no,
+    					 cno:this.cno,
+    					 type:this.type,
+    					 msg:msg
+    				 }
+    			 }).then(res=>{
+    				 console.log(res.data)
+    				 // res.data=Map {list=[],curpage:1....}
+    				 this.reply_list=res.data.list
+    				 this.curpage=res.data.curpage
+    				 this.totalpage=res.data.totalpage
+    				 this.startPage=res.data.startPage
+    				 this.endPage=res.data.endPage
+    				 $('#imsg'+no).val("")
+    				 // textarea
+    				 $('#in'+no).hide()
+    				 // table
+    				 $('#i'+no).text("Reply")
+    				 // Button
+    			 }).catch(error=>{
+    				 console.log(error.response)
+    			 })
+    		 },
+    		 replyUpdate(no){
+    			 let msg=$('#umsg'+no).val()
+    			 if(msg.trim()==="")
+    			 {
+    				 $('#umsg'+no).focus()
+    				 return
+    			 }
+    			 
+    			 axios.post('../comment/update_vue.do',null,{
+    				 params:{
+    					 no:no,
+    					 cno:this.cno,
+    					 type:this.type,
+    					 msg:msg
+    				 }
+    			 }).then(res=>{
+    				 console.log(res.data)
+    				 // res.data=Map {list=[],curpage:1....}
+    				 this.reply_list=res.data.list
+    				 this.curpage=res.data.curpage
+    				 this.totalpage=res.data.totalpage
+    				 this.startPage=res.data.startPage
+    				 this.endPage=res.data.endPage
+    				 $('#umsg'+no).val("")
+    				 // textarea
+    				 $('#up'+no).hide()
+    				 // table
+    				 $('#u'+no).text("Update")
+    				 // Button
+    			 }).catch(error=>{
+    				 console.log(error.response)
+    			 })
+    		 },
+    		 replyUpdateForm(rno){
+    			 $('.ins').hide()
+    			 $('.insert').text("Reply")
+    			 $('.ups').hide()
+    			 $('.update').text("Update")
+    			 if(this.upReply===false)
+    			 {
+    				 this.upReply=true
+    				 $('#up'+rno).show()
+    				 $('#u'+rno).text("Cancel")
+    			 }
+    			 else
+    			 {
+    				 this.upReply=false
+    				 $('#up'+rno).hide()
+    				 $('#u'+rno).text("Update")
+    			 }
+    		 },
+    		 replyInsert(){
+    			 /*
+    			    데이터 읽기 쓰기 => data()안 있는 변수 
+    			                => v-model
+    			    해당 태그 제어 
+    			     => ref
+    			     => $refs.ref명...
+    			 */
+    			 if(this.msg==='')
+    			 {
+    				 this.$refs.msg.focus()
+    				 return
+    			 }
+    			 // 데이터를 서버로 전송 
+    			 axios.post('../comment/insert_vue.do',null,{
+    				 params:{
+    					 cno:this.cno,
+    					 type:this.type,
+    					 msg:this.msg
+    				 }
+    			 }).then(res=>{
+    				 console.log(res.data)
+    				 // res.data=Map {list=[],curpage:1....}
+    				 this.reply_list=res.data.list
+    				 this.curpage=res.data.curpage
+    				 this.totalpage=res.data.totalpage
+    				 this.startPage=res.data.startPage
+    				 this.endPage=res.data.endPage
+    				 this.msg=''
+    			 }).catch(error=>{
+    				 console.log(error.response)
+    			 })
+    		 },
+    		 dataRecv(){
+    			 axios.get("../comment/list_vue.do",{
+    				 params:{
+    					page:this.curpage,
+    					cno:this.cno,
+    					type:this.type
+    				 }
+    			 }).then(res=>{
+    				 console.log(res.data)
+    				 // res.data=Map {list=[],curpage:1....}
+    				 this.reply_list=res.data.list
+    				 this.curpage=res.data.curpage
+    				 this.totalpage=res.data.totalpage
+    				 this.startPage=res.data.startPage
+    				 this.endPage=res.data.endPage
+    				 
+    			 }).catch(error=>{
+    				 console.log(error.response)
+    			 })
+    		 }
+    	 }
+     }).mount("#replyApp")
+    </script>
 </body>
 </html>

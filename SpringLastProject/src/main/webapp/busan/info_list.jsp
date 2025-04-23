@@ -64,7 +64,7 @@
                                 </div>
                                 
                             </div>
-                            <a :href="'../busan/detail.do?fno='+vo.fno">
+                            <a :href="'../busan/detail.do?no='+vo.no">
                                 <h4 class="post-headline">{{vo.title}}</h4>
                             </a>
                         </div>
