@@ -68,15 +68,24 @@
                       </tr>
                       <tr>
                        <th width="25%">수량</th>
-                       <td width="45%"></td>
+                       <td width="45%">
+                         <select class="form-control" v-model="account">
+                           <option v-for="i in 10" :value="i">{{i}}</option>
+                         </select>
+                       </td>
                       </tr>
                       <tr>
                        <th width="25%">총 금액</th>
-                       <td width="45%"></td>
+                       <td width="45%">{{total}}</td>
                       </tr>
+                      <c:if test="${sessionScope.userid!=null }">
                       <tr>
-                       <td colspan="2"></td>
+                        <td colspan="2" class="text-center">
+                          <button class="btn-lg btn-danger" @click="goodsCart()">장바구니</button>
+                          <button class="btn-lg btn-primary" @click="goodsBuy()">바로구매</button>
+                        </td>
                       </tr>
+                      </c:if>
                     </table>
                     <table class="table">
                     </table>
@@ -90,8 +99,6 @@
               <%-- 댓글 : Vue --%>
               <!-- Comment Area Start -->
                             <div class="comment_area section_padding_50 clearfix">
-                                
-
                                 <ol>
                                     <!-- Single Comment Area -->
                                     <li class="single_comment_area" v-for="rvo in reply_list">
@@ -194,6 +201,8 @@
    	 data(){
    		 return {
    			 vo: {},
+   			 price: 0,
+   			 account: 0,
    			 reply_list: [],
    			 cno: ${no},
    			 type: 3,
@@ -214,12 +223,41 @@
    			} 
    		 }).then(res => {
    			 this.vo=res.data
+   			 let temp=res.data.goods_price.replace("원", "")
+   			 temp=temp.replace(",", "");
+   			 this.price=parseInt(temp)
    		 }).catch(error => {
    			console.log(error.response) 
    		 })
    		 this.dataRecv()
    	 },
+   	 computed: {
+   		 total() {
+   			 return this.price*this.account
+   		 }
+   	 },
    	 methods: {
+   		 // 장바구니
+   		 goodsCart() {
+   			 axios.post('../goods/cart_insert.do', null, {
+   				 params: {
+   					 account: this.account,
+   					 gno: this.cno
+   				 }
+   			 }).then(res => {
+   				 if(res.data==="yes")
+   				 {
+   					 location.href="../mypage/cart_list.do"
+   				 }else
+   				 {
+   					 alert("장바구니 담기 실패\n"+res.data)
+   				 }
+   			 })
+   		 },
+   		 // 바로구매
+   		 goodsBuy() {
+   			 
+   		 },
    		 replyDelete(no) {
    			 axios.get('../comment/Delete_vue.do', {
    				 params:{

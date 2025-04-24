@@ -12,6 +12,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 </head>
 <body>
     <div class="breadcumb-nav">
@@ -20,31 +21,30 @@
                 <div class="col-12">
                   <table class="table">
                     <tr>
-                      <th class="text-center">예약 번호</th>
+                      <th class="text-center">번호</th>
                       <th></th>
-                      <th class="text-center">업체명</th>
-                      <th class="text-center">예약일</th>
-                      <th class="text-center">예약 시간</th>
-                      <th class="text-center">예약 인원</th>
-                      <th class="text-center">예약 등록일</th>
+                      <th class="text-center">상품명</th>
+                      <th class="text-center">가격</th>
+                      <th class="text-center">수량</th>
+                      <th class="text-center">구매일</th>
                       <th class="text-center">비고</th>
                     </tr>
                     <c:forEach var="vo" items="${list }">
                       <tr>
-                        <td class="text-center">${vo.rno }</td>
+                        <td class="text-center">${vo.cno }</td>
                         <td class="text-center">
-                          <img src="https://www.menupan.com${vo.fvo.poster }" style="width: 35px; height: 35px;">
+                          <img src="${vo.gvo.goods_poster }" style="width: 35px; height: 35px;">
                         </td>
-                        <td>${vo.fvo.name }</td>
+                        <td>${vo.gvo.goods_name }</td>
                         <td class="text-center">
-                          ${vo.rday }
+                          ${vo.gvo.goods_price }
+                        </td>l
+                        <td class="text-center">
+                          ${vo.account }
                         </td>
-                        <td class="text-center">${vo.rtime }</td>
-                        <td class="text-center">${vo.rinwon }</td>
                         <td class="text-center">${vo.dbday }</td>
                         <td class="text-center">
-                          <input type="button" value="${vo.isReserve==0? '예약대기':'예약완료' }" class="btn-sm btn-success">
-                          <a href="../reserve/reserve_delete.do?rno=${vo.rno }" class="btn-sm btn-info">예약 취소</a>
+                          <a href="../goods/detail.do?no=${vo.gno }" class="btn-sm btn-info">상세보기</a>
                         </td>
                       </tr>
                     </c:forEach>

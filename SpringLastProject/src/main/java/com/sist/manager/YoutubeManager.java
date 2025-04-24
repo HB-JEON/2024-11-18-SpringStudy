@@ -34,13 +34,12 @@ public class YoutubeManager {
 					}
 					sb.append(s);
 				}
-				
 				result=sb.toString();
 				
 				in.close();
 				conn.disconnect();
 			}
-			System.out.println(sb.toString());
+//			System.out.println(sb.toString());
 		}catch(Exception e) {}
 		return result;
 	}

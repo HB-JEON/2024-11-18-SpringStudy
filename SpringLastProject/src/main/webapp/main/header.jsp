@@ -130,14 +130,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="../goods/list.do">부산 특산물</a>
                                 </li>
-                                <c:if test="${sessionScope.userid!=null }">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="../reserve/main.do">빠른 예약</a>
+                                    <a class="nav-link" href="../movie/movie_list.do">Open API</a>
                                 </li>
+                                <c:if test="${sessionScope.userid!=null }">
                                 </c:if>
                                <sec:authorize access="hasRole('ROLE_USER')">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="../mypage/reserve_list.do">마이페이지</a>
+                                    <a class="nav-link" href="../mypage/mypage_main.do">마이페이지</a>
                                 </li>
                                </sec:authorize>
                                
